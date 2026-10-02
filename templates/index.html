@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Notes Cloud</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Student Notes Cloud</h1>
+    <h2>Upload a Note</h2>
+    <p>Welcome! Upload your notes below.</p>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Upload Note</button>
+    </form>
+    <h2>Search Notes</h2>
+    <input type="text" id="searchBox" placeholder="Search notes...">
+    <h2>Your Notes</h2>
+    <ul>
+    {% if notes %}
+        {% for note in notes %}
+            <li>
+                <a href="/uploads/{{ note }}">{{ note }}</a>
+                <form action="/delete/{{ note }}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li>No notes uploaded yet.</li>
+    {% endif %}
+</ul>
+    <script>
+    const searchBox = document.getElementById("searchBox");
+    const notes = document.querySelectorAll("li");
+
+    searchBox.addEventListener("input", function() {
+        const searchText = searchBox.value.toLowerCase();
+
+        notes.forEach(function(note) {
+            const noteName = note.textContent.toLowerCase();
+
+            if (noteName.includes(searchText)) {
+                note.style.display = "";
+            } else {
+                note.style.display = "none";
+            }
+        });
+    });
+    </script>
+</body>
+</html>

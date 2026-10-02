@@ -1,0 +1,109 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: aliceblue;
+}
+
+h1 {
+    text-align: center;
+    color: midnightblue;
+    font-size: 36px;
+    margin-bottom: 35px;
+    letter-spacing: 1px;
+}
+
+h2 {
+    background-color: white;
+    padding: 12px;
+    border-radius: 8px;
+    color: darkslateblue;
+}
+
+p {
+    color: dimgray;
+}
+
+input[type="file"],
+input[type="text"] {
+    padding: 12px;
+    margin: 8px 0;
+    width: 90%;
+    border: 2px solid lightsteelblue;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+input[type="text"]:focus {
+    border-color: royalblue;
+}
+
+button {
+    padding: 11px 18px;
+    margin: 5px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background-color: royalblue;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+button:hover {
+    background-color: mediumblue;
+}
+
+ul {
+    padding: 0;
+}
+
+li {
+    list-style: none;
+    margin: 15px 0;
+    padding: 18px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    box-shadow: 0 3px 8px lightgray;
+}
+
+li a {
+    color: darkblue;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+li a:hover {
+    color: royalblue;
+    text-decoration: underline;
+}
+
+li form {
+    display: inline;
+}
+
+li form button {
+    background-color: crimson;
+    font-size: 14px;
+}
+
+li form button:hover {
+    background-color: darkred;
+    transform: scale(1.05);
+}
+form[action="/upload"] button {
+    background-color: seagreen;
+}
+
+form[action="/upload"] button:hover {
+    background-color: darkgreen;
+}
+button,
+li {
+    transition: 0.2s;
+}
