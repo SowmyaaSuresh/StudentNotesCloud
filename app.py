@@ -3,6 +3,7 @@ import os
 app = Flask(__name__)
 @app.route("/")
 def home():
+    os.makedirs("uploads", exist_ok=True)
     notes = os.listdir("uploads")
     return render_template("index.html", notes=notes)
 @app.route("/upload", methods=["POST"])
