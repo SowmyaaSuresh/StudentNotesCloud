@@ -1,27 +1,33 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from pathlib import Path
-from dotenv import dotenv_values
+from dotenv import load_dotenv
+import os
 from supabase import create_client
 
 # --------------------------------------------------
 # LOAD ENVIRONMENT VARIABLES
 # --------------------------------------------------
 
-env_path = Path(__file__).resolve().parent / ".env"
-config = dotenv_values(str(env_path))
+# Loads .env locally.
+# On Render, variables come from Render Environment Variables.
+load_dotenv()
 
-print("ENV FILE EXISTS:", env_path.exists())
-print("ENV FILE PATH:", env_path)
-print("ENV KEYS:", list(config.keys()))
-
-supabase_url = config["SUPABASE_URL"]
-supabase_key = config["SUPABASE_KEY"]
-supabase_secret_key = config["SUPABASE_SECRET_KEY"]
+supabase_url = os.getenv("SUPABASE_URL")
+supabase_key = os.getenv("SUPABASE_KEY")
+supabase_secret_key = os.getenv("SUPABASE_SECRET_KEY")
 
 print("SUPABASE URL LOADED:", bool(supabase_url))
 print("SUPABASE KEY LOADED:", bool(supabase_key))
 print("SUPABASE SECRET KEY LOADED:", bool(supabase_secret_key))
 
+if not supabase_url:
+    raise RuntimeError("SUPABASE_URL is missing.")
+
+if not supabase_key:
+    raise RuntimeError("SUPABASE_KEY is missing.")
+
+if not supabase_secret_key:
+    raise RuntimeError("SUPABASE_SECRET_KEY is missing.")
 
 # --------------------------------------------------
 # SUPABASE CLIENTS
@@ -39,14 +45,16 @@ admin_client = create_client(
     supabase_secret_key
 )
 
-
 # --------------------------------------------------
 # FLASK
 # --------------------------------------------------
 
 app = Flask(__name__)
-app.secret_key = "student-notes-cloud-secret"
 
+app.secret_key = os.getenv(
+    "FLASK_SECRET_KEY",
+    "student-notes-cloud-secret"
+)
 
 # --------------------------------------------------
 # GET SUPABASE CLIENT
@@ -58,7 +66,6 @@ def get_user_supabase():
         return None
 
     return admin_client
-
 
 # --------------------------------------------------
 # HOME
@@ -103,7 +110,6 @@ def home():
             "index.html",
             notes=[]
         )
-
 
 # --------------------------------------------------
 # UPLOAD
@@ -206,8 +212,7 @@ def upload():
                 repr(e)
             )
 
-            # If database insertion failed after
-            # Storage upload, remove the orphaned file.
+            # Remove orphaned Storage file
             try:
 
                 user_supabase.storage.from_("notes").remove(
@@ -233,7 +238,6 @@ def upload():
 
     return redirect(url_for("home"))
 
-
 # --------------------------------------------------
 # DOWNLOAD
 # --------------------------------------------------
@@ -251,7 +255,7 @@ def uploaded_file(filename):
         if user_supabase is None:
             return redirect(url_for("login"))
 
-        # Check that this file belongs to the user
+        # Check ownership
         result = (
             user_supabase
             .table("notes")
@@ -301,7 +305,6 @@ def uploaded_file(filename):
 
         return redirect(url_for("home"))
 
-
 # --------------------------------------------------
 # DELETE
 # --------------------------------------------------
@@ -322,10 +325,7 @@ def delete_file(filename):
 
             return redirect(url_for("login"))
 
-        # ------------------------------------------
-        # STEP 1: Check ownership
-        # ------------------------------------------
-
+        # Check ownership
         result = (
             user_supabase
             .table("notes")
@@ -343,10 +343,7 @@ def delete_file(filename):
 
             return redirect(url_for("home"))
 
-        # ------------------------------------------
-        # STEP 2: Delete from Supabase Storage
-        # ------------------------------------------
-
+        # Delete from Supabase Storage
         print(
             "DELETING FROM STORAGE:",
             filename
@@ -361,21 +358,20 @@ def delete_file(filename):
             filename
         )
 
-        # ------------------------------------------
-        # STEP 3: Delete database record
-        # ------------------------------------------
-
+        # Delete database record
         print(
             "DELETING DATABASE RECORD:",
             filename
         )
 
-        user_supabase \
-            .table("notes") \
-            .delete() \
-            .eq("user_id", session["user_id"]) \
-            .eq("filename", filename) \
+        (
+            user_supabase
+            .table("notes")
+            .delete()
+            .eq("user_id", session["user_id"])
+            .eq("filename", filename)
             .execute()
+        )
 
         print(
             "DATABASE DELETE SUCCESS:",
@@ -398,7 +394,6 @@ def delete_file(filename):
         )
 
     return redirect(url_for("home"))
-
 
 # --------------------------------------------------
 # REGISTER
@@ -446,7 +441,6 @@ def register():
     return render_template(
         "register.html"
     )
-
 
 # --------------------------------------------------
 # LOGIN
@@ -514,7 +508,6 @@ def login():
         "login.html"
     )
 
-
 # --------------------------------------------------
 # LOGOUT
 # --------------------------------------------------
@@ -542,7 +535,6 @@ def logout():
     return redirect(
         url_for("login")
     )
-
 
 # --------------------------------------------------
 # RUN APPLICATION
