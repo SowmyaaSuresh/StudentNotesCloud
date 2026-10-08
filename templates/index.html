@@ -1,51 +1,361 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
     <title>Student Notes Cloud</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
 </head>
+
+
 <body>
-    <h1>Student Notes Cloud</h1>
-    <h2>Upload a Note</h2>
-    <p>Welcome! Upload your notes below.</p>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" required>
-        <button type="submit">Upload Note</button>
+
+
+    <div class="top-bar">
+
+        <h1>Student Notes Cloud</h1>
+
+        <a
+            href="/logout"
+            class="logout-button"
+        >
+            Logout
+        </a>
+
+    </div>
+
+
+    <!-- Flask messages -->
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <p class="message">
+                    {{ message }}
+                </p>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- Download message -->
+
+    <p
+        id="downloadMessage"
+        class="message"
+        style="display: none;"
+    ></p>
+
+
+    <!-- Upload -->
+
+    <h2>Upload Notes</h2>
+
+    <p>
+        Select one or multiple files to upload.
+    </p>
+
+
+    <form
+        action="/upload"
+        method="POST"
+        enctype="multipart/form-data"
+    >
+
+        <input
+            type="file"
+            name="files"
+            multiple
+            required
+        >
+
+
+        <button type="submit">
+            Upload Notes
+        </button>
+
     </form>
+
+
+    <!-- Search -->
+
     <h2>Search Notes</h2>
-    <input type="text" id="searchBox" placeholder="Search notes...">
+
+
+    <input
+        type="text"
+        id="searchBox"
+        placeholder="Search notes..."
+    >
+
+
+    <!-- Notes -->
+
     <h2>Your Notes</h2>
-    <ul>
-    {% if notes %}
-        {% for note in notes %}
+
+
+    <ul id="notesList">
+
+
+        {% if notes %}
+
+
+            {% for note in notes %}
+
+                <li>
+
+                    <a
+                        href="/uploads/{{ note.filename }}"
+                        class="download-link"
+                        data-filename="{{ note.filename }}"
+                    >
+                        {{ note.filename }}
+                    </a>
+
+
+                    <form
+                        action="/delete/{{ note.filename }}"
+                        method="POST"
+                    >
+
+                        <button type="submit">
+                            Delete
+                        </button>
+
+                    </form>
+
+                </li>
+
+            {% endfor %}
+
+
+        {% else %}
+
             <li>
-                <a href="/uploads/{{ note }}">{{ note }}</a>
-                <form action="/delete/{{ note }}" method="POST">
-                    <button type="submit">Delete</button>
-                </form>
+                No notes uploaded yet.
             </li>
-        {% endfor %}
-    {% else %}
-        <li>No notes uploaded yet.</li>
-    {% endif %}
-</ul>
+
+        {% endif %}
+
+
+    </ul>
+
+
     <script>
-    const searchBox = document.getElementById("searchBox");
-    const notes = document.querySelectorAll("li");
 
-    searchBox.addEventListener("input", function() {
-        const searchText = searchBox.value.toLowerCase();
 
-        notes.forEach(function(note) {
-            const noteName = note.textContent.toLowerCase();
+        /*
+         * SEARCH
+         */
 
-            if (noteName.includes(searchText)) {
-                note.style.display = "";
-            } else {
-                note.style.display = "none";
+
+        const searchBox =
+            document.getElementById("searchBox");
+
+
+        const notes =
+            document.querySelectorAll("#notesList li");
+
+
+        searchBox.addEventListener(
+            "input",
+            function() {
+
+
+                const searchText =
+                    searchBox.value.toLowerCase();
+
+
+                notes.forEach(
+                    function(note) {
+
+
+                        const noteName =
+                            note.textContent.toLowerCase();
+
+
+                        if (
+                            noteName.includes(searchText)
+                        ) {
+
+                            note.style.display = "";
+
+                        } else {
+
+                            note.style.display = "none";
+
+                        }
+
+
+                    }
+                );
+
+
             }
-        });
-    });
+        );
+
+
+        /*
+         * DOWNLOAD
+         */
+
+
+        const downloadLinks =
+            document.querySelectorAll(
+                ".download-link"
+            );
+
+
+        const downloadMessage =
+            document.getElementById(
+                "downloadMessage"
+            );
+
+
+        downloadLinks.forEach(
+            function(link) {
+
+
+                link.addEventListener(
+                    "click",
+                    async function(event) {
+
+
+                        event.preventDefault();
+
+
+                        const filename =
+                            link.getAttribute(
+                                "data-filename"
+                            );
+
+
+                        try {
+
+
+                            const response =
+                                await fetch(
+                                    "/uploads/" +
+                                    encodeURIComponent(
+                                        filename
+                                    )
+                                );
+
+
+                            if (!response.ok) {
+
+                                throw new Error(
+                                    "Download failed"
+                                );
+
+                            }
+
+
+                            const blob =
+                                await response.blob();
+
+
+                            const url =
+                                window.URL.createObjectURL(
+                                    blob
+                                );
+
+
+                            const downloadLink =
+                                document.createElement(
+                                    "a"
+                                );
+
+
+                            downloadLink.href = url;
+
+
+                            downloadLink.download =
+                                filename;
+
+
+                            document.body.appendChild(
+                                downloadLink
+                            );
+
+
+                            downloadLink.click();
+
+
+                            downloadLink.remove();
+
+
+                            window.URL.revokeObjectURL(
+                                url
+                            );
+
+
+                            downloadMessage.textContent =
+                                "File downloaded successfully.";
+
+
+                            downloadMessage.style.display =
+                                "block";
+
+
+                            setTimeout(
+                                function() {
+
+                                    downloadMessage.style.display =
+                                        "none";
+
+                                },
+                                3000
+                            );
+
+
+                        } catch (error) {
+
+
+                            downloadMessage.textContent =
+                                "Could not download the file.";
+
+
+                            downloadMessage.style.display =
+                                "block";
+
+
+                            setTimeout(
+                                function() {
+
+                                    downloadMessage.style.display =
+                                        "none";
+
+                                },
+                                3000
+                            );
+
+
+                        }
+
+
+                    }
+                );
+
+
+            }
+        );
+
+
     </script>
+
+
 </body>
+
 </html>

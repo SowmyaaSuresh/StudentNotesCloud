@@ -1,109 +1,553 @@
-body {
-    font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: aliceblue;
+/* ================================
+   GLOBAL
+================================ */
+
+* {
+    box-sizing: border-box;
 }
 
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8f9ff);
+    color: #1f2937;
+    min-height: 100vh;
+}
+
+
+/* ================================
+   MAIN CONTAINER
+================================ */
+
+body {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 35px 25px;
+}
+
+
+/* ================================
+   HEADINGS
+================================ */
+
 h1 {
+    color: #312e81;
+    font-size: 38px;
     text-align: center;
-    color: midnightblue;
-    font-size: 36px;
-    margin-bottom: 35px;
-    letter-spacing: 1px;
+    margin: 0 0 35px;
+    letter-spacing: -1px;
 }
 
 h2 {
-    background-color: white;
-    padding: 12px;
-    border-radius: 8px;
-    color: darkslateblue;
+    background: white;
+    color: #3730a3;
+    padding: 18px 20px;
+    border-radius: 14px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    box-shadow: 0 5px 20px rgba(79, 70, 229, 0.08);
 }
+
+
+/* ================================
+   PARAGRAPHS
+================================ */
 
 p {
-    color: dimgray;
+    color: #6b7280;
+    line-height: 1.6;
 }
 
-input[type="file"],
-input[type="text"] {
-    padding: 12px;
-    margin: 8px 0;
-    width: 90%;
-    border: 2px solid lightsteelblue;
-    border-radius: 8px;
-    background-color: white;
+
+/* ================================
+   TOP BAR
+================================ */
+
+.top-bar {
+    position: relative;
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 8px 30px rgba(31, 41, 55, 0.08);
+    margin-bottom: 30px;
+}
+
+.top-bar h1 {
+    margin: 0;
+}
+
+
+/* ================================
+   LOGOUT
+================================ */
+
+.logout-button {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+
+    padding: 10px 18px;
+
+    background: #ef4444;
+    color: white;
+
+    text-decoration: none;
+    border-radius: 10px;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.logout-button:hover {
+    background: #dc2626;
+    transform: translateY(-50%) scale(1.04);
+}
+
+
+/* ================================
+   UPLOAD SECTION
+================================ */
+
+form[action="/upload"] {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(31, 41, 55, 0.07);
+}
+
+
+/* ================================
+   FILE INPUT
+================================ */
+
+input[type="file"] {
+    width: 100%;
+    padding: 14px;
+
+    border: 2px dashed #a5b4fc;
+    border-radius: 12px;
+
+    background: #f5f7ff;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    transition: 0.2s;
+}
+
+input[type="file"]:hover {
+    border-color: #6366f1;
+    background: #eef2ff;
+}
+
+
+/* ================================
+   SEARCH
+================================ */
+
+#searchBox {
+    width: 100%;
+
+    padding: 15px 18px;
+
+    margin: 5px 0 10px;
+
+    border: 2px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    background: white;
+
     font-size: 16px;
+
     outline: none;
+
+    transition: 0.2s;
 }
 
-input[type="text"]:focus {
-    border-color: royalblue;
+#searchBox:focus {
+    border-color: #6366f1;
+
+    box-shadow:
+        0 0 0 4px rgba(99, 102, 241, 0.12);
 }
+
+
+/* ================================
+   BUTTONS
+================================ */
 
 button {
-    padding: 11px 18px;
-    margin: 5px;
-    cursor: pointer;
     border: none;
-    border-radius: 8px;
-    background-color: royalblue;
+
+    padding: 11px 20px;
+
+    margin: 8px 4px;
+
+    border-radius: 10px;
+
+    background: #6366f1;
+
     color: white;
+
+    font-size: 14px;
+
     font-weight: bold;
-    font-size: 15px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
 }
 
 button:hover {
-    background-color: mediumblue;
+    background: #4f46e5;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 12px rgba(79, 70, 229, 0.25);
 }
+
+
+/* ================================
+   UPLOAD BUTTON
+================================ */
+
+form[action="/upload"] button {
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #4f46e5
+    );
+
+    padding: 13px 24px;
+
+    margin-top: 15px;
+}
+
+form[action="/upload"] button:hover {
+    background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #4338ca
+    );
+}
+
+
+/* ================================
+   NOTES LIST
+================================ */
 
 ul {
     padding: 0;
+    margin: 0;
 }
+
+
+/* ================================
+   NOTE CARD
+================================ */
 
 li {
     list-style: none;
-    margin: 15px 0;
-    padding: 18px;
-    background-color: white;
-    border-radius: 10px;
-    border: 1px solid lightgray;
-    box-shadow: 0 3px 8px lightgray;
+
+    background: white;
+
+    margin: 14px 0;
+
+    padding: 18px 20px;
+
+    border-radius: 14px;
+
+    border: 1px solid #eef0f6;
+
+    box-shadow:
+        0 5px 18px rgba(31, 41, 55, 0.06);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    transition: 0.2s;
 }
 
+li:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(31, 41, 55, 0.1);
+}
+
+
+/* ================================
+   NOTE LINK
+================================ */
+
 li a {
-    color: darkblue;
+    color: #3730a3;
+
     text-decoration: none;
+
     font-weight: bold;
-    font-size: 17px;
+
+    font-size: 16px;
+
+    word-break: break-word;
+
+    transition: 0.2s;
 }
 
 li a:hover {
-    color: royalblue;
-    text-decoration: underline;
+    color: #6366f1;
 }
+
+
+/* ================================
+   DELETE BUTTON
+================================ */
 
 li form {
     display: inline;
 }
 
 li form button {
-    background-color: crimson;
-    font-size: 14px;
+    background: #fee2e2;
+
+    color: #dc2626;
+
+    margin: 0;
+
+    padding: 9px 14px;
 }
 
 li form button:hover {
-    background-color: darkred;
-    transform: scale(1.05);
-}
-form[action="/upload"] button {
-    background-color: seagreen;
+    background: #dc2626;
+
+    color: white;
+
+    box-shadow: none;
 }
 
-form[action="/upload"] button:hover {
-    background-color: darkgreen;
+
+/* ================================
+   MESSAGES
+================================ */
+
+.message {
+    background: #ecfdf5;
+
+    color: #047857;
+
+    border: 1px solid #a7f3d0;
+
+    padding: 12px 16px;
+
+    border-radius: 10px;
+
+    margin: 12px 0;
+
+    font-weight: 500;
 }
-button,
-li {
+
+
+/* ================================
+   AUTHENTICATION PAGES
+================================ */
+
+.auth-container {
+    max-width: 460px;
+
+    margin: 70px auto;
+
+    text-align: center;
+}
+
+.auth-container h1 {
+    margin-bottom: 25px;
+}
+
+
+/* ================================
+   AUTH CARD
+================================ */
+
+.auth-card {
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 15px 45px rgba(31, 41, 55, 0.1);
+
+    text-align: left;
+}
+
+.auth-card h2 {
+    text-align: center;
+
+    background: transparent;
+
+    padding: 0;
+
+    margin: 0 0 10px;
+
+    box-shadow: none;
+}
+
+.auth-subtitle {
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+
+/* ================================
+   LABELS
+================================ */
+
+.auth-card label {
+    display: block;
+
+    margin: 17px 0 7px;
+
+    color: #374151;
+
+    font-weight: bold;
+
+    font-size: 14px;
+}
+
+
+/* ================================
+   AUTH INPUTS
+================================ */
+
+.auth-card input {
+    width: 100%;
+
+    padding: 13px 15px;
+
+    border: 2px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    outline: none;
+
     transition: 0.2s;
+}
+
+.auth-card input:focus {
+    border-color: #6366f1;
+
+    box-shadow:
+        0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+
+/* ================================
+   AUTH BUTTON
+================================ */
+
+.register-button {
+    width: 100%;
+
+    margin: 25px 0 10px;
+
+    padding: 13px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #4f46e5
+    );
+}
+
+.register-button:hover {
+    background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #4338ca
+    );
+}
+
+
+/* ================================
+   LOGIN LINK
+================================ */
+
+.login-link {
+    text-align: center;
+
+    margin-top: 20px;
+}
+
+.login-link a {
+    color: #4f46e5;
+
+    font-weight: bold;
+
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+
+/* ================================
+   MOBILE RESPONSIVE
+================================ */
+
+@media (max-width: 650px) {
+
+    body {
+        padding: 20px 15px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    .top-bar {
+        padding: 22px 15px 70px;
+    }
+
+    .logout-button {
+        top: auto;
+        bottom: 15px;
+        right: 15px;
+        transform: none;
+    }
+
+    .logout-button:hover {
+        transform: scale(1.04);
+    }
+
+    li {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    li form {
+        width: 100%;
+    }
+
+    li form button {
+        width: 100%;
+    }
+
+    .auth-card {
+        padding: 25px 20px;
+    }
 }
